@@ -55,7 +55,7 @@ export default function FirstPage({
 
         <div className="mt-8 text-center">
           <span className="text-gray-500">Already have an account?</span>{" "}
-          <Link href="/login" className="text-blue-600 font-medium">
+          <Link href="/SignIn" className="text-blue-600 font-medium">
             Log in
           </Link>
         </div>

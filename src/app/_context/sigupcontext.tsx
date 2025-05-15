@@ -2,16 +2,14 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
 import axios from "axios";
 import { User } from "@/utils/type";
-
 type UserContextType = {
   user: User | null;
   setUser: (user: User | null) => void;
   handleSignup: (email: string, password: string) => Promise<boolean>;
+  handleSignin: (email: string, password: string) => Promise<boolean>;
   error: string;
 };
-
 const UserContext = createContext<UserContextType | undefined>(undefined);
-
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [error, setError] = useState("");
@@ -25,14 +23,31 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
       });
       setUser(res.data.user);
       return true;
-    } catch (error) {
-      console.log("error :>> ", error);
+    } catch (error: any) {
+      setError(error?.response?.data?.error || "Signup error");
+      return false;
+    }
+  };
+
+  const handleSignin = async (email: string, password: string) => {
+    setError("");
+    try {
+      const res = await axios.post("http://localhost:3000/api/signin", {
+        email,
+        password,
+      });
+      setUser(res.data.user);
+      return true;
+    } catch (error: any) {
+      setError(error?.response?.data?.error || "Signin error");
       return false;
     }
   };
 
   return (
-    <UserContext.Provider value={{ user, setUser, handleSignup, error }}>
+    <UserContext.Provider
+      value={{ user, setUser, handleSignup, handleSignin, error }}
+    >
       {children}
     </UserContext.Provider>
   );

@@ -5,13 +5,13 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useUser } from "@/app/_context/sigupcontext";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 
-export default function SecondPage({ email }: { email: string }) {
-  const router = useRouter();
-  const { handleSignup, error } = useUser();
+type StepTwoProps = {
+  next: () => void;
+  email: string;
+};
+
+export default function StepTwo({ next, email }: StepTwoProps) {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
@@ -19,30 +19,31 @@ export default function SecondPage({ email }: { email: string }) {
     e.preventDefault();
 
     if (password !== confirmPassword) {
-      toast.error("Passwords do not match");
+      alert("Нууц үг таарахгүй байна");
       return;
     }
 
-    const success = await handleSignup(email, password);
+    const res = await fetch("/api/set-password", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
 
-    if (success) {
-      toast.success("Signup successful!");
-      router.push("/");
+    const data = await res.json();
+    if (res.ok) {
+      alert("Нууц үг амжилттай тохируулагдлаа");
+      next(); // Optional: next step
     } else {
-      toast.error("Signup failed: This email is already in use.");
+      alert(data.error || "Алдаа гарлаа");
     }
   };
 
   return (
     <div className="flex w-[416px] flex-col justify-center items-start gap-6">
       <div className="w-full">
-        <button
-          type="button"
-          onClick={() => router.back()}
-          className="p-2 mb-4 rounded-full hover:bg-gray-100"
-        >
-          <ArrowLeft size={24} />
-        </button>
+        <ArrowLeft size={24} />
 
         <h1 className="text-3xl font-bold mb-2">Create a strong password</h1>
         <p className="text-gray-500 mb-6">
@@ -66,7 +67,6 @@ export default function SecondPage({ email }: { email: string }) {
             className="w-full py-6 px-4 text-lg"
             required
           />
-          {error && <p className="text-red-500">{error}</p>}
 
           <Button
             type="submit"
