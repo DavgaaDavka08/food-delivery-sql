@@ -20,7 +20,7 @@ export const Headerlogin = () => {
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-[60px] gap-2 items-center flex flex-col ">
           <DropdownMenuLabel>@gmail.comUser</DropdownMenuLabel>
-          <Link href="/">
+          <Link href="/SignIn">
             <Button>Sign out</Button>
           </Link>
         </DropdownMenuContent>

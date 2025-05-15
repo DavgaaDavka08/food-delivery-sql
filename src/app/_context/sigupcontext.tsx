@@ -23,8 +23,9 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
       });
       setUser(res.data.user);
       return true;
-    } catch (error: any) {
-      setError(error?.response?.data?.error || "Signup error");
+    } catch (error) {
+      console.log("error :>> ", error);
+
       return false;
     }
   };
@@ -38,8 +39,8 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
       });
       setUser(res.data.user);
       return true;
-    } catch (error: any) {
-      setError(error?.response?.data?.error || "Signin error");
+    } catch (error) {
+      console.log("error :>> ", error);
       return false;
     }
   };

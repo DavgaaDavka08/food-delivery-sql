@@ -5,7 +5,7 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
     const { _id } = body;
-
+    console.log("body :>> ", body);
     if (!_id) {
       return NextResponse.json({ message: "ID шаардлагатай" }, { status: 400 });
     }
@@ -24,6 +24,7 @@ export async function POST(req: Request) {
       { message: "amjilttai ustgalaa", data: deleted[0] },
       { status: 200 }
     );
+    console.log("deleted :>> ", deleted);
   } catch (error) {
     console.error("Нийтлэл устгах үед алдаа: ", error);
     return NextResponse.json(

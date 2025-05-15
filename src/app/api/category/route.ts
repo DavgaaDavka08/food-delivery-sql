@@ -39,14 +39,14 @@ export const POST = async (req: Request) => {
   }
 };
 
-export const PUT = async (req: Request) => {
+export async function PATCH(req: Request) {
   try {
     const body = await req.json();
     const { id, categoryName } = body;
 
     if (!id || !categoryName) {
       return NextResponse.json(
-        { error: "ID болон categoryName шаардлагатай" },
+        { message: "ID болон categoryName шаардлагатай" },
         { status: 400 }
       );
     }
@@ -61,20 +61,20 @@ export const PUT = async (req: Request) => {
 
     if (updated.length === 0) {
       return NextResponse.json(
-        { error: "Category олдсонгүй" },
+        { message: "Засах категори олдсонгүй" },
         { status: 404 }
       );
     }
 
     return NextResponse.json(
-      { message: "Амжилттай шинэчлэгдлээ", data: updated[0] },
+      { message: "Амжилттай заслаа", data: updated[0] },
       { status: 200 }
     );
   } catch (error) {
-    console.error("PUT error:", error);
+    console.error("Нийтлэл засахад алдаа:", error);
     return NextResponse.json(
-      { error: "Шинэчлэхэд алдаа гарлаа" },
+      { message: "Алдаа гарлаа нийтлэл засах үед", error },
       { status: 500 }
     );
   }
-};
+}

@@ -1,5 +1,4 @@
 "use client";
-
 import {
   createContext,
   useContext,
@@ -48,7 +47,7 @@ const CategoryProvider = ({ children }: { children: ReactNode }) => {
 
   const updateCategory = async (id: string, categoryName: string) => {
     try {
-      await axios.put(`http://localhost:3000/api/category${id}`, {
+      await axios.patch(`http://localhost:3000/api/category${id}`, {
         id,
         categoryName,
       });
@@ -59,15 +58,14 @@ const CategoryProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const deleteCategory = async (_id: string) => {
+  const deleteCategory = async (id: string) => {
     try {
-      await axios.post("/api/category/delete", {
-        _id,
+      await axios.delete("http://localhost:3000/api/category", {
+        data: { id },
       });
-
       await fetchCategories();
     } catch (error) {
-      console.error("Error deleting article:", error);
+      console.error("Error deleting category:", error);
       throw error;
     }
   };
