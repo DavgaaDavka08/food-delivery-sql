@@ -4,7 +4,7 @@ export type User = {
   password: string;
 };
 export type CategoryType = {
-  id: string;
+  id: number;
   categoryName: string;
   _id: string;
 };

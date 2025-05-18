@@ -1,34 +1,31 @@
+import { NextRequest, NextResponse } from "next/server";
 import { runQuery } from "@/utils/querySrvice";
-import { NextResponse } from "next/server";
 
-export async function POST(req: Request) {
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
   try {
-    const body = await req.json();
-    const { _id } = body;
-    console.log("body :>> ", body);
-    if (!_id) {
-      return NextResponse.json({ message: "ID шаардлагатай" }, { status: 400 });
-    }
+    const { id } = params;
 
     const deleteQuery = `DELETE FROM "category" WHERE id = $1 RETURNING *;`;
-    const deleted = await runQuery(deleteQuery, [_id]);
+    const deleted = await runQuery(deleteQuery, [id]);
 
     if (!deleted || deleted.length === 0) {
       return NextResponse.json(
-        { message: "Устгах category олдсонгүй" },
+        { message: "Category not found" },
         { status: 404 }
       );
     }
 
     return NextResponse.json(
-      { message: "amjilttai ustgalaa", data: deleted[0] },
+      { message: "Deleted successfully", data: deleted[0] },
       { status: 200 }
     );
-    console.log("deleted :>> ", deleted);
   } catch (error) {
-    console.error("Нийтлэл устгах үед алдаа: ", error);
+    console.error("Delete error:", error);
     return NextResponse.json(
-      { message: "Алдаа гарлаа нийтлэл устгах үед", error },
+      { message: "Server error", error },
       { status: 500 }
     );
   }

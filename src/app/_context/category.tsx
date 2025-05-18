@@ -29,7 +29,7 @@ const CategoryProvider = ({ children }: { children: ReactNode }) => {
   const fetchCategories = async () => {
     try {
       const response = await axios.get("http://localhost:3000/api/category");
-      setGetCategory(response.data.getNews);
+      setGetCategory(response.data.getcategory);
     } catch (error) {
       console.error("Fetch error:", error);
     }
@@ -47,7 +47,7 @@ const CategoryProvider = ({ children }: { children: ReactNode }) => {
 
   const updateCategory = async (id: string, categoryName: string) => {
     try {
-      await axios.patch(`http://localhost:3000/api/category${id}`, {
+      await axios.patch("http://localhost:3000/api/category", {
         id,
         categoryName,
       });
@@ -60,12 +60,14 @@ const CategoryProvider = ({ children }: { children: ReactNode }) => {
 
   const deleteCategory = async (id: string) => {
     try {
-      await axios.delete("http://localhost:3000/api/category", {
-        data: { id },
+      console.log("id :>> ", id);
+      await axios.post("http://localhost:3000/api/category/delete", {
+        id,
       });
+
       await fetchCategories();
     } catch (error) {
-      console.error("Error deleting category:", error);
+      console.error("Error deleting article:", error);
       throw error;
     }
   };

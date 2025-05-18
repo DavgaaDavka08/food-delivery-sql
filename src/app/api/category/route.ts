@@ -4,7 +4,7 @@ export const GET = async () => {
   try {
     const getQuery = `SELECT * FROM "category" ORDER BY id DESC;`;
     const categories = await runQuery(getQuery, []);
-    return NextResponse.json({ getNews: categories }, { status: 200 });
+    return NextResponse.json({ getcategory: categories }, { status: 200 });
   } catch (error) {
     console.error("GET error:", error);
     return NextResponse.json(
