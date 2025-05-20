@@ -5,6 +5,8 @@ import Header from "./_Components/Header";
 import { UserProvider } from "./_context/sigupcontext";
 import { Toaster } from "@/components/ui/sonner";
 import CategoryProvider from "./_context/category";
+import FoodProvider from "./_context/foods";
+import CloudnaryProvider from "./_context/cloudnaryimage";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,10 +34,13 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Header />
-
-        <UserProvider>
-          <CategoryProvider>{children}</CategoryProvider>
-        </UserProvider>
+        <CloudnaryProvider>
+          <UserProvider>
+            <FoodProvider>
+              <CategoryProvider>{children}</CategoryProvider>
+            </FoodProvider>
+          </UserProvider>
+        </CloudnaryProvider>
 
         <Toaster />
       </body>

@@ -2,7 +2,7 @@ import { runQuery } from "@/utils/querySrvice";
 import { NextResponse } from "next/server";
 export const GET = async () => {
   try {
-    const getQuery = `SELECT * FROM "category" ORDER BY id DESC;`;
+    const getQuery = `SELECT * FROM "category" ORDER BY category_id DESC;`;
     const categories = await runQuery(getQuery, []);
     return NextResponse.json({ getcategory: categories }, { status: 200 });
   } catch (error) {
@@ -42,11 +42,11 @@ export const POST = async (req: Request) => {
 export async function PATCH(req: Request) {
   try {
     const body = await req.json();
-    const { id, categoryName } = body;
+    const { category_id, categoryName } = body;
 
-    if (!id || !categoryName) {
+    if (!category_id || !categoryName) {
       return NextResponse.json(
-        { message: "ID болон categoryName шаардлагатай" },
+        { message: "category_idID болон categoryName шаардлагатай" },
         { status: 400 }
       );
     }
@@ -54,10 +54,10 @@ export async function PATCH(req: Request) {
     const updateCategory = `
       UPDATE "category" 
       SET "categoryName" = $1 
-      WHERE id = $2 
+      WHERE category_id = $2 
       RETURNING *;
     `;
-    const updated = await runQuery(updateCategory, [categoryName, id]);
+    const updated = await runQuery(updateCategory, [categoryName, category_id]);
 
     if (updated.length === 0) {
       return NextResponse.json(

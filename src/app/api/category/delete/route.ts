@@ -3,13 +3,13 @@ import { runQuery } from "@/utils/querySrvice";
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { category_id: string } }
 ) {
   try {
-    const { id } = params;
+    const { category_id } = params;
 
-    const deleteQuery = `DELETE FROM "category" WHERE id = $1 RETURNING *;`;
-    const deleted = await runQuery(deleteQuery, [id]);
+    const deleteQuery = `DELETE FROM "category" WHERE categoryid = $1 RETURNING *;`;
+    const deleted = await runQuery(deleteQuery, [category_id]);
 
     if (!deleted || deleted.length === 0) {
       return NextResponse.json(

@@ -1,9 +1,13 @@
 "use client";
 
+import { CategoryType } from "@/utils/type";
 import { Category } from "./addcategory";
+import { useCategory } from "@/app/_context/category";
+import { AddFoods } from "./addfood";
 
 // import { DialogDemos } from "@/components/ui/myshdchn/api-Shadchn/foodMenuDialogs";
 export default function Catagory() {
+  const { getCategory } = useCategory();
   return (
     <div className="w-full flex flex-col items-center bg-gray-50 py-4 sm:py-8">
       <div className="w-[92%] flex flex-col gap-4 sm:gap-6 mb-8 sm:mb-10">
@@ -16,19 +20,17 @@ export default function Catagory() {
         </div>
 
         <div className="flex flex-col gap-3 sm:gap-4">
-          {/* {(getSeriousCategory ?? []).map(
-            (seriousData: SeriousCategoryType, index: number) => (
-              <div
-                key={index}
-                className="bg-white rounded-2xl shadow-sm p-4 flex flex-col gap-2 border border-indigo-100"
-              >
-                <p className="text-base sm:text-lg font-semibold text-indigo-600">
-                  {seriousData.SeriousName}
-                </p>
-                <SeriousArticle data={seriousData._id} />
-              </div>
-            )
-          )} */}
+          {(getCategory ?? []).map((Data: CategoryType, index: number) => (
+            <div
+              key={index}
+              className="bg-white rounded-2xl shadow-sm p-4 flex flex-col gap-2 border border-indigo-100"
+            >
+              <p className="text-base sm:text-lg font-semibold text-indigo-600">
+                {Data.categoryName}
+              </p>
+              <AddFoods data={Data._id} />
+            </div>
+          ))}
         </div>
       </div>
       {/* Category Section */}

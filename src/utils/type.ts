@@ -4,7 +4,15 @@ export type User = {
   password: string;
 };
 export type CategoryType = {
-  id: number;
+  category_id: number;
   categoryName: string;
   _id: string;
+};
+export type FoodType = {
+  food_id: number;
+  foodName: string;
+  foodprice: string;
+  ingredients: string;
+  image: string;
+  connect_id: string;
 };

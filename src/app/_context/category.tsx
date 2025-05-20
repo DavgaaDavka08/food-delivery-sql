@@ -13,8 +13,8 @@ type CategoryContextType = {
   getCategory: CategoryType[];
   setGetCategory: (categories: CategoryType[]) => void;
   addCategory: (categoryName: string) => Promise<void>;
-  updateCategory: (id: string, categoryName: string) => Promise<void>;
-  deleteCategory: (id: string) => Promise<void>;
+  updateCategory: (category_id: string, categoryName: string) => Promise<void>;
+  deleteCategory: (category_id: string) => Promise<void>;
 };
 
 const CategoryContext = createContext<CategoryContextType>(
@@ -45,10 +45,10 @@ const CategoryProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const updateCategory = async (id: string, categoryName: string) => {
+  const updateCategory = async (category_id: string, categoryName: string) => {
     try {
       await axios.patch("http://localhost:3000/api/category", {
-        id,
+        category_id,
         categoryName,
       });
       await fetchCategories();
@@ -58,11 +58,11 @@ const CategoryProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const deleteCategory = async (id: string) => {
+  const deleteCategory = async (category_id: string) => {
     try {
-      console.log("id :>> ", id);
+      console.log("id :>> ", category_id);
       await axios.post("http://localhost:3000/api/category/delete", {
-        id,
+        category_id,
       });
 
       await fetchCategories();
