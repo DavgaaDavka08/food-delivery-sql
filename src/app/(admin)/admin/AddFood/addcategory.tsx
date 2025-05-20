@@ -62,16 +62,16 @@ export function Category() {
               <ContextMenuItem
                 inset
                 className="text-red-500 hover:text-red-600"
-                onClick={() => deleteCategory(data._id)}
+                onClick={() => deleteCategory(data.category_id)}
               >
                 Устгах
               </ContextMenuItem>
 
               <Dialog
-                open={editTargetId === data._id}
+                open={editTargetId === data.category_id}
                 onOpenChange={(isOpen) => {
                   if (isOpen) {
-                    setEditTargetId(data._id);
+                    setEditTargetId(data.category_id);
                     setEditName(data.categoryName);
                   } else {
                     setEditTargetId(null);
@@ -106,7 +106,7 @@ export function Category() {
                           console.error("Категори нэр хоосон байна");
                           return;
                         }
-                        await updateCategory(data._id, editName);
+                        await updateCategory(data.category_id, editName);
                         setEditTargetId(null);
                       }}
                     >

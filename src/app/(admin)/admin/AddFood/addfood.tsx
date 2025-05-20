@@ -13,14 +13,20 @@ import {
 import Image from "next/image";
 import { useState } from "react";
 import UpdateFoodMap from "./updatefood";
+import { useCategory } from "@/app/_context/category";
 
-export const AddFoods = ({ data }: { data: string }) => {
+export const AddFoods = ({ data }: { data: number }) => {
   const { addFoods } = useFood();
+  const { getCategory } = useCategory();
   const { previewUrl, handleChange, uploadImage, articleImageFile } =
     useCloudnary();
+
   const [foodName, setFoodName] = useState("");
   const [ingredients, setIngredients] = useState("");
   const [foodprice, setFoodPrice] = useState("");
+  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
+    null
+  );
 
   const handleSubmit = async () => {
     try {
@@ -29,10 +35,25 @@ export const AddFoods = ({ data }: { data: string }) => {
         console.error("Image upload амжилтгүй боллоо.");
         return;
       }
-      await addFoods(foodName, foodprice, ingredients, imageUrl, data);
+
+      if (!selectedCategoryId) {
+        console.error("Ангилал сонгогдоогүй байна.");
+        return;
+      }
+
+      await addFoods(
+        foodName,
+        foodprice,
+        ingredients,
+        imageUrl,
+        selectedCategoryId
+      );
+
       setFoodName("");
       setFoodPrice("");
       setIngredients("");
+      setSelectedCategoryId(null);
+
       console.log("Амжилттай хоол нэмэгдлээ!");
     } catch (error) {
       console.error("Submit алдаа:", error);
@@ -58,7 +79,7 @@ export const AddFoods = ({ data }: { data: string }) => {
           <DialogHeader>
             <DialogTitle>Шинэ хоол нэмэх</DialogTitle>
             <DialogDescription>
-              Доорх формыг бөглөж submit дарна уу.
+              Доорх формыг бөглөж Submit дарна уу.
             </DialogDescription>
           </DialogHeader>
 
@@ -85,11 +106,11 @@ export const AddFoods = ({ data }: { data: string }) => {
                 type="file"
                 onChange={(e) => handleChange(e)}
               />
-              {previewUrl && (
+              {typeof previewUrl === "string" && previewUrl && (
                 <div className="relative w-full h-[120px] mt-4 overflow-hidden rounded-md border">
                   <Image
                     src={previewUrl}
-                    alt="Preview"
+                    alt="Uploaded preview image"
                     fill
                     className="object-cover rounded-md"
                   />
@@ -120,12 +141,34 @@ export const AddFoods = ({ data }: { data: string }) => {
                 placeholder="Жишээ: 8000₮"
               />
             </div>
+
+            <div className="flex flex-col gap-1">
+              <label className="text-sm font-medium text-gray-700">
+                Ангилал
+              </label>
+              <select
+                value={selectedCategoryId ?? ""}
+                onChange={(e) =>
+                  setSelectedCategoryId(Number(e.target.value) || null)
+                }
+                className="w-full h-10 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-red-400 text-sm"
+              >
+                <option value="">Ангилал сонгох</option>
+                {getCategory?.map((cat) => (
+                  <option key={cat.category_id} value={cat.category_id}>
+                    {cat.categoryName}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
+
           <Button onClick={handleSubmit} className="mt-4">
             Submit
           </Button>
         </DialogContent>
       </Dialog>
+
       <UpdateFoodMap category={data} />
     </div>
   );

@@ -6,11 +6,10 @@ export type User = {
 export type CategoryType = {
   category_id: number;
   categoryName: string;
-  _id: string;
 };
 export type FoodType = {
   food_id: number;
-  foodName: string;
+  foodname: string;
   foodprice: string;
   ingredients: string;
   image: string;

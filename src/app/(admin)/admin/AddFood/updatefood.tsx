@@ -25,7 +25,7 @@ const UpdateFoodMap = ({ category }: { category: string }) => {
   const [isSaving, setIsSaving] = useState(false);
   const [editData, setEditData] = useState<FoodType>({
     food_id: 0,
-    foodName: "",
+    foodname: "",
     foodprice: "",
     ingredients: "",
     image: "",
@@ -60,8 +60,8 @@ const UpdateFoodMap = ({ category }: { category: string }) => {
       }
 
       await updateFoods(
-        String(editData.food_id),
-        editData.foodName,
+        editData.food_id,
+        editData.foodname,
         editData.foodprice,
         editData.ingredients,
         imageUrl,
@@ -83,21 +83,19 @@ const UpdateFoodMap = ({ category }: { category: string }) => {
             key={item.food_id}
             className="bg-white border rounded-2xl p-4 shadow-sm hover:shadow-lg transition-all"
           >
-            {/* Image */}
             <div className="w-full h-[150px] rounded-md overflow-hidden mb-2">
               <Image
                 src={item.image || "/fallback-image.png"}
-                alt={item.foodName}
+                alt=""
                 width={400}
                 height={150}
                 className="object-cover w-full h-full"
               />
             </div>
 
-            {/* Title + Edit */}
             <div className="flex justify-between items-center mb-2">
               <p className="font-semibold text-gray-800 truncate">
-                {item.foodName}
+                {item.foodname}
               </p>
               <Dialog>
                 <DialogTrigger asChild>
@@ -119,9 +117,9 @@ const UpdateFoodMap = ({ category }: { category: string }) => {
                       <Label htmlFor="foodName">Name</Label>
                       <Input
                         id="foodName"
-                        value={editData.foodName}
+                        value={editData.foodname}
                         onChange={(e) =>
-                          setEditData({ ...editData, foodName: e.target.value })
+                          setEditData({ ...editData, foodname: e.target.value })
                         }
                       />
                     </div>
@@ -165,15 +163,13 @@ const UpdateFoodMap = ({ category }: { category: string }) => {
                     </div>
 
                     {editData.image && (
-                      <div className="flex justify-center">
-                        <Image
-                          src={editData.image}
-                          alt="Preview"
-                          width={150}
-                          height={150}
-                          className="rounded-md object-cover"
-                        />
-                      </div>
+                      <Image
+                        src={editData.image}
+                        alt="Preview"
+                        width={150}
+                        height={150}
+                        className="rounded-md object-cover"
+                      />
                     )}
                   </div>
 
@@ -193,12 +189,10 @@ const UpdateFoodMap = ({ category }: { category: string }) => {
               </Dialog>
             </div>
 
-            {/* Ingredients */}
             <p className="text-sm text-gray-600 line-clamp-2">
               {item.ingredients}
             </p>
 
-            {/* Price */}
             <span className="text-sm font-medium text-green-600">
               ₮ {item.foodprice}
             </span>

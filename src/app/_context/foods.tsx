@@ -20,7 +20,7 @@ type FoodFoodContextType = {
     connect_id: string
   ) => Promise<void>;
   updateFoods: (
-    food_id: string,
+    food_id: number,
     foodname: string,
     foodprice: string,
     ingredients: string,
@@ -70,7 +70,7 @@ const FoodProvider = ({ children }: { children: ReactNode }) => {
     }
   };
   const updateFoods = async (
-    food_id: string,
+    food_id: number,
     foodname: string,
     foodprice: string,
     ingredients: string,
@@ -96,10 +96,9 @@ const FoodProvider = ({ children }: { children: ReactNode }) => {
   const deleteFoods = async (food_id: string) => {
     try {
       console.log("id :>> ", food_id);
-      await axios.delete("http://localhost:3000/api/foods", {
-        data: { food_id },
+      await axios.post("http://localhost:3000/api/foods/delete", {
+        food_id,
       });
-
       await GetFoods();
     } catch (error) {
       console.error("Error deleting article:", error);

@@ -1,4 +1,5 @@
 import { runQuery } from "@/utils/querySrvice";
+
 import { NextResponse } from "next/server";
 
 export const GET = async () => {
@@ -63,5 +64,58 @@ export const POST = async (req: Request) => {
   } catch (error) {
     console.error("error :>> ", error);
     return NextResponse.json({ error: "Алдаа гарлаа" }, { status: 500 });
+  }
+};
+export const PATCH = async (req: Request) => {
+  try {
+    const body = await req.json();
+    const { food_id, foodname, foodprice, ingredients, image, connect_id } =
+      body;
+
+    if (
+      !food_id ||
+      !foodname ||
+      !foodprice ||
+      !ingredients ||
+      !image ||
+      !connect_id
+    ) {
+      return NextResponse.json(
+        { error: "Бүх талбарыг бүрэн бөглөнө үү." },
+        { status: 400 }
+      );
+    }
+
+    const editFood = `
+      UPDATE "foods"
+      SET foodname = $1,
+          foodprice = $2,
+          ingredients = $3,
+          image = $4,
+          connect_id = $5
+      WHERE food_id = $6
+      RETURNING *
+    `;
+
+    const values = [
+      foodname,
+      foodprice,
+      ingredients,
+      image,
+      connect_id,
+      food_id,
+    ];
+    const result = await runQuery(editFood, values);
+
+    return NextResponse.json(
+      { message: "Амжилттай заслаа", data: result[0] },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("PATCH алдаа:", error);
+    return NextResponse.json(
+      { error: "Дотоод серверийн алдаа." },
+      { status: 500 }
+    );
   }
 };
