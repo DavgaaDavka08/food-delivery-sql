@@ -23,7 +23,7 @@ const UpdateFoodMap = ({ category }: { category: number }) => {
   const { getFood, deleteFoods, updateFoods } = useFood();
   const { handleChange, uploadImage, articleImageFile } = useCloudnary();
   const [isSaving, setIsSaving] = useState(false);
-
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [editData, setEditData] = useState<FoodType>({
     food_id: 0,
     foodname: "",
@@ -68,6 +68,8 @@ const UpdateFoodMap = ({ category }: { category: number }) => {
         imageUrl,
         editData.connect_id
       );
+
+      setDialogOpen(false);
     } catch (error) {
       console.error("Update error:", error);
     } finally {
@@ -82,9 +84,9 @@ const UpdateFoodMap = ({ category }: { category: number }) => {
         .map((item) => (
           <div
             key={item.food_id}
-            className="bg-white border rounded-2xl p-4 shadow-sm hover:shadow-lg transition-all"
+            className="bg-white border rounded-2xl p-4 shadow-md hover:shadow-xl transition-all"
           >
-            <div className="w-full h-[150px] rounded-md overflow-hidden mb-2">
+            <div className="w-full h-[150px] rounded-lg overflow-hidden mb-3">
               <Image
                 src={item.image || "/fallback-image.png"}
                 alt=""
@@ -95,13 +97,16 @@ const UpdateFoodMap = ({ category }: { category: number }) => {
             </div>
 
             <div className="flex justify-between items-center mb-2">
-              <p className="font-semibold text-gray-800 truncate">
+              <p className="font-semibold text-gray-800 text-lg truncate">
                 {item.foodname}
               </p>
-              <Dialog>
+              <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
                 <DialogTrigger asChild>
                   <button
-                    onClick={() => handleOpenEdit(item)}
+                    onClick={() => {
+                      handleOpenEdit(item);
+                      setDialogOpen(true);
+                    }}
                     className="text-sm px-2 py-1 rounded-md bg-gray-100 hover:bg-gray-200"
                   >
                     ✎
@@ -109,47 +114,24 @@ const UpdateFoodMap = ({ category }: { category: number }) => {
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[450px] max-h-[90vh] overflow-y-auto">
                   <DialogHeader>
-                    <DialogTitle>Edit Food</DialogTitle>
-                    <DialogDescription>Update the food item</DialogDescription>
+                    <DialogTitle className="text-xl font-bold">
+                      Edit Food
+                    </DialogTitle>
+                    <DialogDescription>
+                      Update the food item below.
+                    </DialogDescription>
                   </DialogHeader>
 
-                  <div className="flex flex-col gap-4">
+                  <div className="flex flex-col gap-4 mt-4">
                     <div>
-                      <Label htmlFor="foodName">Name</Label>
+                      <Label htmlFor="foodName">Food Name</Label>
                       <Input
                         id="foodName"
                         value={editData.foodname}
                         onChange={(e) =>
                           setEditData({ ...editData, foodname: e.target.value })
                         }
-                      />
-                    </div>
-
-                    <div>
-                      <Label htmlFor="foodprice">Price</Label>
-                      <Input
-                        id="foodprice"
-                        value={editData.foodprice}
-                        onChange={(e) =>
-                          setEditData({
-                            ...editData,
-                            foodprice: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
-
-                    <div>
-                      <Label htmlFor="ingredients">Ingredients</Label>
-                      <Input
-                        id="ingredients"
-                        value={editData.ingredients}
-                        onChange={(e) =>
-                          setEditData({
-                            ...editData,
-                            ingredients: e.target.value,
-                          })
-                        }
+                        placeholder="Enter food name"
                       />
                     </div>
 
@@ -167,22 +149,62 @@ const UpdateFoodMap = ({ category }: { category: number }) => {
                       <Image
                         src={editData.image}
                         alt="Preview"
-                        width={150}
-                        height={150}
-                        className="rounded-md object-cover"
+                        width={200}
+                        height={200}
+                        className="rounded-lg object-cover border"
                       />
                     )}
+
+                    <div>
+                      <Label htmlFor="ingredients">Ingredients</Label>
+                      <Input
+                        id="ingredients"
+                        value={editData.ingredients}
+                        onChange={(e) =>
+                          setEditData({
+                            ...editData,
+                            ingredients: e.target.value,
+                          })
+                        }
+                        placeholder="Enter ingredients"
+                      />
+                    </div>
+
+                    <div>
+                      <Label htmlFor="foodprice">Price (₮)</Label>
+                      <Input
+                        id="foodprice"
+                        value={editData.foodprice}
+                        onChange={(e) =>
+                          setEditData({
+                            ...editData,
+                            foodprice: e.target.value,
+                          })
+                        }
+                        placeholder="₮ 0.00"
+                      />
+                    </div>
                   </div>
 
-                  <DialogFooter className="mt-4 flex justify-between">
+                  <DialogFooter className="mt-6 flex justify-between gap-4">
                     <Button
                       variant="outline"
+                      disabled={isSaving}
                       onClick={() => deleteFoods(String(item.food_id))}
-                      className="text-red-500 border-red-300"
+                      className="border border-red-300 text-red-500 hover:bg-red-100"
                     >
                       Delete
                     </Button>
-                    <Button onClick={handleSave} disabled={isSaving}>
+
+                    <Button
+                      onClick={handleSave}
+                      disabled={isSaving}
+                      className={`${
+                        isSaving
+                          ? "bg-gray-300 text-gray-600 cursor-not-allowed"
+                          : "bg-[#EF4444] text-white hover:bg-[#dc2626]"
+                      } px-6`}
+                    >
                       {isSaving ? "Saving..." : "Save"}
                     </Button>
                   </DialogFooter>
@@ -190,7 +212,7 @@ const UpdateFoodMap = ({ category }: { category: number }) => {
               </Dialog>
             </div>
 
-            <p className="text-sm text-gray-600 line-clamp-2">
+            <p className="text-sm text-gray-600 line-clamp-2 mb-1">
               {item.ingredients}
             </p>
 
@@ -202,4 +224,5 @@ const UpdateFoodMap = ({ category }: { category: number }) => {
     </div>
   );
 };
+
 export default UpdateFoodMap;

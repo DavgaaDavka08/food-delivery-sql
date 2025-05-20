@@ -27,9 +27,11 @@ export const AddFoods = ({ data }: { data: number }) => {
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
     null
   );
-
+  const [isSaving, setIsSaving] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const handleSubmit = async () => {
     try {
+      setIsSaving(true);
       const imageUrl = await uploadImage(articleImageFile);
       if (!imageUrl || typeof imageUrl === "object") {
         console.error("Image upload амжилтгүй боллоо.");
@@ -53,7 +55,7 @@ export const AddFoods = ({ data }: { data: number }) => {
       setFoodPrice("");
       setIngredients("");
       setSelectedCategoryId(null);
-
+      setDialogOpen(false);
       console.log("Амжилттай хоол нэмэгдлээ!");
     } catch (error) {
       console.error("Submit алдаа:", error);
@@ -62,7 +64,7 @@ export const AddFoods = ({ data }: { data: number }) => {
 
   return (
     <div className="flex flex-wrap p-5 items-start gap-4">
-      <Dialog>
+      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogTrigger asChild>
           <div className="w-[280px] h-[100px] z-0 flex flex-col justify-center items-center gap-6 rounded-[20px] border border-dashed border-red-500">
             <Button
@@ -163,8 +165,16 @@ export const AddFoods = ({ data }: { data: number }) => {
             </div>
           </div>
 
-          <Button onClick={handleSubmit} className="mt-4">
-            Submit
+          <Button
+            onClick={handleSubmit}
+            disabled={isSaving}
+            className={`w-full mt-4 ${
+              isSaving
+                ? "bg-gray-300 text-gray-600 cursor-not-allowed"
+                : "bg-[#EF4444] text-white hover:bg-[#dc2626]"
+            }`}
+          >
+            {isSaving ? "Saving..." : "Save"}
           </Button>
         </DialogContent>
       </Dialog>
