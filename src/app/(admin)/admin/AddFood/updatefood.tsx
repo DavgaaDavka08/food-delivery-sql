@@ -19,10 +19,11 @@ import { FoodType } from "@/utils/type";
 import { useCloudnary } from "@/app/_context/cloudnaryimage";
 import { useFood } from "@/app/_context/foods";
 
-const UpdateFoodMap = ({ category }: { category: string }) => {
+const UpdateFoodMap = ({ category }: { category: number }) => {
   const { getFood, deleteFoods, updateFoods } = useFood();
   const { handleChange, uploadImage, articleImageFile } = useCloudnary();
   const [isSaving, setIsSaving] = useState(false);
+
   const [editData, setEditData] = useState<FoodType>({
     food_id: 0,
     foodname: "",

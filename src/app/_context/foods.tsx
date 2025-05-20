@@ -17,7 +17,7 @@ type FoodFoodContextType = {
     foodprice: string,
     ingredients: string,
     image: string,
-    connect_id: string
+    connect_id: number
   ) => Promise<void>;
   updateFoods: (
     food_id: number,
@@ -25,7 +25,7 @@ type FoodFoodContextType = {
     foodprice: string,
     ingredients: string,
     image: string,
-    connect_id: string
+    connect_id: number
   ) => Promise<void>;
   deleteFoods: (food_id: string) => Promise<void>;
 };
@@ -53,7 +53,7 @@ const FoodProvider = ({ children }: { children: ReactNode }) => {
     foodprice: string,
     ingredients: string,
     image: string,
-    connect_id: string
+    connect_id: number
   ) => {
     try {
       await axios.post("http://localhost:3000/api/foods", {
@@ -75,7 +75,7 @@ const FoodProvider = ({ children }: { children: ReactNode }) => {
     foodprice: string,
     ingredients: string,
     image: string,
-    connect_id: string
+    connect_id: number
   ) => {
     try {
       await axios.patch("http://localhost:3000/api/foods", {

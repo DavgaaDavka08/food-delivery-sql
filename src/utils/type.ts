@@ -13,5 +13,5 @@ export type FoodType = {
   foodprice: string;
   ingredients: string;
   image: string;
-  connect_id: string;
+  connect_id: number;
 };

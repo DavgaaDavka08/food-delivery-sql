@@ -34,8 +34,7 @@ export function Category() {
   const [open, setOpen] = useState(false);
   const { addCategory, getCategory, deleteCategory, updateCategory } =
     useCategory();
-
-  const [editTargetId, setEditTargetId] = useState<string | null>(null);
+  const [editTargetId, setEditTargetId] = useState<number | null>(null);
   const [editName, setEditName] = useState<string>("");
   const [categoryName, setCategoryName] = useState("");
 
