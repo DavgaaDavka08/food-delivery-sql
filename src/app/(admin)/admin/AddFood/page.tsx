@@ -12,8 +12,7 @@ export default function Catagory() {
       <div className="w-[92%] flex flex-col gap-4 sm:gap-6 mb-8 sm:mb-10">
         <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6 flex flex-col gap-3 sm:gap-4 border border-indigo-200">
           <h4 className="text-xl sm:text-2xl font-bold text-gray-800 leading-snug">
-            Чухал дээр харагдах мэдээгээ бичээрэй анай 1 мэдээ энэ дээр бичнэ
-            шүү
+            category
           </h4>
           <Category />
         </div>
@@ -24,9 +23,13 @@ export default function Catagory() {
               key={index}
               className="bg-white rounded-2xl shadow-sm p-4 flex flex-col gap-2 border border-indigo-100"
             >
+              <h4 className="text-xl sm:text-2xl font-bold text-gray-800 leading-snug">
+                foods
+              </h4>
               <p className="text-base sm:text-lg font-semibold text-indigo-600">
                 {Data.categoryName}
               </p>
+
               <AddFoods data={Data.category_id} />
             </div>
           ))}
