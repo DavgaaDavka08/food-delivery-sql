@@ -33,13 +33,15 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Header />
         <CloudnaryProvider>
-          <UserProvider>
-            <FoodProvider>
-              <CategoryProvider>{children}</CategoryProvider>
-            </FoodProvider>
-          </UserProvider>
+          <FoodProvider>
+            <CategoryProvider>
+              <UserProvider>
+                <Header />
+                {children}
+              </UserProvider>
+            </CategoryProvider>
+          </FoodProvider>
         </CloudnaryProvider>
 
         <Toaster />

@@ -1,7 +1,14 @@
 "use client";
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from "react";
 import axios from "axios";
 import { User } from "@/utils/type";
+
 type UserContextType = {
   user: User | null;
   setUser: (user: User | null) => void;
@@ -9,23 +16,36 @@ type UserContextType = {
   handleSignin: (email: string, password: string) => Promise<boolean>;
   error: string;
 };
+
 const UserContext = createContext<UserContextType | undefined>(undefined);
+
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [error, setError] = useState("");
 
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem("user", JSON.stringify(user));
+    } else {
+      localStorage.removeItem("user");
+    }
+  }, [user]);
+
   const handleSignup = async (email: string, password: string) => {
     setError("");
     try {
-      const res = await axios.post("http://localhost:3000/api/signup", {
-        email,
-        password,
-      });
+      const res = await axios.post("/api/signup", { email, password });
       setUser(res.data.user);
       return true;
     } catch (error) {
-      console.log("error :>> ", error);
-
+      console.error("Signup error:", error);
       return false;
     }
   };
@@ -33,14 +53,11 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const handleSignin = async (email: string, password: string) => {
     setError("");
     try {
-      const res = await axios.post("http://localhost:3000/api/signin", {
-        email,
-        password,
-      });
+      const res = await axios.post("/api/signin", { email, password });
       setUser(res.data.user);
       return true;
     } catch (error) {
-      console.log("error :>> ", error);
+      console.error("Signin error:", error);
       return false;
     }
   };
@@ -56,6 +73,8 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
 export const useUser = () => {
   const context = useContext(UserContext);
-  if (!context) throw new Error("useUser must be used within a UserProvider");
+  if (context === undefined) {
+    throw new Error("useUser must be used within a UserProvider");
+  }
   return context;
 };

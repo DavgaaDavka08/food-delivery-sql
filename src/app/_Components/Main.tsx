@@ -3,7 +3,10 @@ import { useState } from "react";
 import Image from "next/image";
 import { Plus, Check } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+// import { useCategory } from "../_context/category";
 export default function FoodMenu() {
+  // const { getCategory } = useCategory();
+
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const toggleSelection = (id: string) => {
     if (selectedItems.includes(id)) {
@@ -40,7 +43,7 @@ export default function FoodMenu() {
   ];
 
   return (
-    <div className=" min-h-screen ">
+    <div className=" bg-[#404040] min-h-screen ">
       <div>
         <Image
           className="w-full h-[470px] "
@@ -52,14 +55,10 @@ export default function FoodMenu() {
       </div>
       {/* Menu Sections */}
       <div className="container mx-auto px-4 py-8">
-        <h2 className="text-2xl font-bold mb-6">Appetizers</h2>
-
+        <h2 className="text-2xl font-bold mb-6"></h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {appetizers.map((item) => (
-            <Card
-              key={item.id}
-              className="bg-zinc-800 border-zinc-700 overflow-hidden"
-            >
+            <Card key={item.id} className=" border-zinc-700 overflow-hidden">
               <div className="relative h-48">
                 <Image
                   src={item.image || "/placeholder.svg"}
@@ -89,7 +88,7 @@ export default function FoodMenu() {
                   </h3>
                   <span className="font-bold">${item.price.toFixed(2)}</span>
                 </div>
-                <p className="text-sm text-zinc-400">{item.description}</p>
+                <p className="text-sm ">{item.description}</p>
               </CardContent>
             </Card>
           ))}
@@ -97,7 +96,7 @@ export default function FoodMenu() {
 
         <h2 className="text-2xl font-bold mt-12 mb-6">Salads</h2>
         <div className="h-32 flex items-center justify-center border border-dashed border-zinc-700 rounded-lg">
-          <p className="text-zinc-500">More menu items coming soon</p>
+          <p>More menu items coming soon</p>
         </div>
       </div>
     </div>

@@ -13,11 +13,8 @@ export default function NavMenu() {
         <Link href="/">
           <div className="flex flex-col">
             <h4 className="text-[18px] font-semibold text-[#09090B] leading-7">
-              Мэдээгээ нэмээрэй
+              Add Food
             </h4>
-            <p className="text-[12px] text-[#71717A] font-semibold leading-4">
-              Хүслээ
-            </p>
           </div>
         </Link>
       </div>
