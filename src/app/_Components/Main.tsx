@@ -1,46 +1,15 @@
 "use client";
-import { useState } from "react";
-import Image from "next/image";
-import { Plus, Check } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
-// import { useCategory } from "../_context/category";
-export default function FoodMenu() {
-  // const { getCategory } = useCategory();
 
-  const [selectedItems, setSelectedItems] = useState<string[]>([]);
-  const toggleSelection = (id: string) => {
-    if (selectedItems.includes(id)) {
-      setSelectedItems(selectedItems.filter((item) => item !== id));
-    } else {
-      setSelectedItems([...selectedItems, id]);
-    }
-  };
-  const appetizers = [
-    {
-      id: "finger-food",
-      name: "Finger food",
-      price: 12.99,
-      description:
-        "Fluffy pancakes stacked with fruits, cream, syrup, and powdered sugar.",
-      image: "/placeholder.svg?height=200&width=300",
-    },
-    {
-      id: "cranberry-brie",
-      name: "Cranberry Brie Bites",
-      price: 12.99,
-      description:
-        "Fluffy pancakes stacked with fruits, cream, syrup, and powdered sugar.",
-      image: "/placeholder.svg?height=200&width=300",
-    },
-    {
-      id: "sunshine-stackers-1",
-      name: "Sunshine Stackers",
-      price: 12.99,
-      description:
-        "Fluffy pancakes stacked with fruits, cream, syrup, and powdered sugar.",
-      image: "/placeholder.svg?height=200&width=300",
-    },
-  ];
+import Image from "next/image";
+
+import { Card, CardContent } from "@/components/ui/card";
+import { useCategory } from "../_context/category";
+import { useFood } from "../_context/foods";
+import { Button } from "@/components/ui/button";
+
+export default function FoodMenu() {
+  const { getCategory } = useCategory();
+  const { getFood } = useFood();
 
   return (
     <div className=" bg-[#404040] min-h-screen ">
@@ -53,48 +22,49 @@ export default function FoodMenu() {
           height={1000}
         />
       </div>
-      {/* Menu Sections */}
-      <div className="container mx-auto px-4 py-8">
-        <h2 className="text-2xl font-bold mb-6"></h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {appetizers.map((item) => (
-            <Card key={item.id} className=" border-zinc-700 overflow-hidden">
-              <div className="relative h-48">
-                <Image
-                  src={item.image || "/placeholder.svg"}
-                  alt={item.name}
-                  fill
-                  className="object-cover"
-                />
-                <button
-                  onClick={() => toggleSelection(item.id)}
-                  className={`absolute bottom-3 right-3 w-8 h-8 rounded-full flex items-center justify-center ${
-                    selectedItems.includes(item.id)
-                      ? "bg-black text-white"
-                      : "bg-white text-black"
-                  }`}
-                >
-                  {selectedItems.includes(item.id) ? (
-                    <Check className="w-5 h-5" />
-                  ) : (
-                    <Plus className="w-5 h-5" />
-                  )}
-                </button>
-              </div>
-              <CardContent className="p-4">
-                <div className="flex justify-between items-start mb-2">
-                  <h3 className="text-lg font-medium text-red-400">
-                    {item.name}
-                  </h3>
-                  <span className="font-bold">${item.price.toFixed(2)}</span>
-                </div>
-                <p className="text-sm ">{item.description}</p>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
 
-        <h2 className="text-2xl font-bold mt-12 mb-6">Salads</h2>
+      <div className="container mx-auto px-4 py-8 ">
+        {getCategory.map((cat) => (
+          <div className="flex flex-col gap-5" key={cat.category_id}>
+            <p className="text-4xl text-white ">{cat.categoryName}</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {getFood
+                .filter((food) => food.connect_id === cat.category_id)
+                .map((item) => (
+                  <Card
+                    key={item.food_id}
+                    className=" border-zinc-700 overflow-hidden"
+                  >
+                    <div className="relative h-48">
+                      <Image
+                        src={item.image || "/placeholder.svg"}
+                        alt={item.foodname}
+                        fill
+                        className="object-cover"
+                      />
+                      <div className="w-[368px] h-[189px] flex  justify-end flex-col items-end">
+                        <div className="flex absolute justify-end flex-col items-center m-a">
+                          <Button className="flex w-[50px] h-[50px] px-4 items-center gap-2 rounded-full bg-[#ffff]">
+                            {}
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <CardContent className="p-4">
+                      <div className="flex justify-between items-start mb-2">
+                        <h3 className="text-lg font-medium text-red-400">
+                          {item.foodname}
+                        </h3>
+                        <span className="font-bold">${item.foodprice}</span>
+                      </div>
+                      <p className="text-sm ">{item.ingredients}</p>
+                    </CardContent>
+                  </Card>
+                ))}
+            </div>
+          </div>
+        ))}
         <div className="h-32 flex items-center justify-center border border-dashed border-zinc-700 rounded-lg">
           <p>More menu items coming soon</p>
         </div>
